@@ -1,0 +1,48 @@
+Users Table
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(50) NOT NULL,
+    guardian_number VARCHAR(20) DEFAULT NULL
+);
+
+Drivers Table
+CREATE TABLE drivers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    body_number VARCHAR(100) NOT NULL,
+    vehicle VARCHAR(100) NOT NULL,
+    contact VARCHAR(20) NOT NULL,
+    address TEXT NOT NULL,
+    corporation VARCHAR(100) NOT NULL,
+    profile_pic VARCHAR(255) DEFAULT 'default.png',
+    qr_code VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) DEFAULT NULL,
+    role VARCHAR(50) DEFAULT 'driver'
+);
+
+Trips Table
+CREATE TABLE trips (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    driver_id INT NOT NULL,
+    origin VARCHAR(255) NOT NULL,
+    destination VARCHAR(255) NOT NULL,
+    user_id INT NOT NULL,
+    status VARCHAR(50) DEFAULT 'completed',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (driver_id) REFERENCES drivers(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+Trip Logs Table
+CREATE TABLE trip_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    trip_id INT NOT NULL,
+    user_id INT NOT NULL,
+    scan_type ENUM('start', 'end') NOT NULL,
+    scan_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (trip_id) REFERENCES trips(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
